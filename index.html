@@ -6,7 +6,10 @@
 
 <title>Birthday Poster Maker</title>
 
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 <style>
+
 *{
   box-sizing:border-box;
 }
@@ -19,7 +22,7 @@ body{
 }
 
 .container{
-  max-width:500px;
+  max-width:520px;
   margin:auto;
   padding:20px;
 }
@@ -47,11 +50,13 @@ h1{
 label{
   display:block;
   font-weight:bold;
-  margin-top:12px;
+  margin-top:14px;
   margin-bottom:6px;
 }
 
-input,textarea,select{
+input,
+textarea,
+select{
   width:100%;
   padding:13px;
   border:1px solid #ddd;
@@ -60,14 +65,14 @@ input,textarea,select{
 }
 
 textarea{
-  height:80px;
+  height:90px;
   resize:none;
 }
 
 button{
   width:100%;
   border:0;
-  padding:14px;
+  padding:15px;
   border-radius:12px;
   font-size:17px;
   font-weight:bold;
@@ -88,7 +93,7 @@ button{
 .poster{
   position:relative;
   overflow:hidden;
-  min-height:620px;
+  min-height:650px;
   border-radius:20px;
   padding:35px 20px;
   text-align:center;
@@ -131,7 +136,7 @@ button{
 }
 
 .poster-subtitle{
-  font-size:21px;
+  font-size:20px;
   margin-bottom:20px;
 }
 
@@ -167,7 +172,7 @@ button{
 }
 
 .message{
-  font-size:19px;
+  font-size:18px;
   line-height:1.5;
   margin:25px 10px;
 }
@@ -180,6 +185,7 @@ button{
 .hidden{
   display:none;
 }
+
 </style>
 </head>
 
@@ -188,79 +194,161 @@ button{
 <div class="container">
 
 <h1>🎂 Birthday Poster Maker</h1>
-<p class="subtitle">अपना सुंदर Birthday Poster बनाएं</p>
+
+<p class="subtitle">
+अपना सुंदर Birthday Poster बनाएं
+</p>
+
 
 <div class="card">
 
 <label>नाम</label>
-<input id="name" type="text" placeholder="जैसे Rahul">
+
+<input
+id="name"
+type="text"
+placeholder="जैसे Rahul"
+>
+
 
 <label>उम्र</label>
-<input id="age" type="number" placeholder="जैसे 25">
+
+<input
+id="age"
+type="number"
+placeholder="जैसे 25"
+>
+
 
 <label>Birthday Photo</label>
-<input id="photo" type="file" accept="image/*">
+
+<input
+id="photo"
+type="file"
+accept="image/*"
+>
+
 
 <label>Birthday Message</label>
-<textarea id="message"
-placeholder="जन्मदिन की ढेर सारी शुभकामनाएं! भगवान आपको हमेशा खुश रखे ❤️"></textarea>
+
+<textarea
+id="message"
+placeholder="जन्मदिन की ढेर सारी शुभकामनाएं! भगवान आपको हमेशा खुश रखे ❤️"
+></textarea>
+
 
 <label>Poster Style</label>
+
 <select id="style">
-<option value="pink">Pink Love</option>
-<option value="blue">Blue Party</option>
-<option value="gold">Golden Birthday</option>
-<option value="purple">Purple Premium</option>
+
+<option value="pink">
+Pink Love
+</option>
+
+<option value="blue">
+Blue Party
+</option>
+
+<option value="gold">
+Golden Birthday
+</option>
+
+<option value="purple">
+Purple Premium
+</option>
+
 </select>
 
-<button class="generate" onclick="generatePoster()">
+
+<button
+class="generate"
+onclick="generatePoster()"
+>
 🎨 Poster Generate करें
 </button>
 
 </div>
 
 
-<div id="result" class="card hidden">
+<div
+id="result"
+class="card hidden"
+>
 
-<div id="poster" class="poster">
+<div
+id="poster"
+class="poster"
+>
 
 <div class="poster-content">
 
-<div style="font-size:55px;">🎂</div>
+<div style="font-size:55px;">
+🎂
+</div>
+
 
 <div class="poster-title">
+
 HAPPY
 <br>
 BIRTHDAY
+
 </div>
+
 
 <div class="poster-subtitle">
+
 🎉 Wishing You A Wonderful Day 🎉
+
 </div>
 
-<div class="photo-box" id="photoBox">
+
+<div
+class="photo-box"
+id="photoBox"
+>
 📷
 </div>
 
-<div class="name" id="posterName">
+
+<div
+class="name"
+id="posterName"
+>
 Your Name
 </div>
 
-<div class="age" id="posterAge">
+
+<div
+class="age"
+id="posterAge"
+>
 </div>
 
-<div class="message" id="posterMessage">
+
+<div
+class="message"
+id="posterMessage"
+>
 जन्मदिन की ढेर सारी शुभकामनाएं ❤️
 </div>
 
+
 <div class="footer">
+
 ✨ Have A Beautiful & Amazing Year ✨
+
 </div>
 
 </div>
+
 </div>
 
-<button class="download" onclick="downloadPoster()">
+
+<button
+class="download"
+onclick="downloadPoster()"
+>
 ⬇️ Poster Download करें
 </button>
 
@@ -273,15 +361,22 @@ Your Name
 
 let uploadedImage = null;
 
-document.getElementById("photo").addEventListener("change", function(e){
+
+/* PHOTO UPLOAD */
+
+document
+.getElementById("photo")
+.addEventListener("change",function(e){
 
 const file = e.target.files[0];
 
-if(!file) return;
+if(!file){
+return;
+}
 
 const reader = new FileReader();
 
-reader.onload = function(event){
+reader.onload=function(event){
 
 uploadedImage = event.target.result;
 
@@ -292,92 +387,184 @@ reader.readAsDataURL(file);
 });
 
 
+/* GENERATE POSTER */
+
 function generatePoster(){
 
 const name =
-document.getElementById("name").value.trim()
+document.getElementById("name")
+.value
+.trim()
 || "Your Name";
 
+
 const age =
-document.getElementById("age").value.trim();
+document.getElementById("age")
+.value
+.trim();
+
 
 const message =
-document.getElementById("message").value.trim()
+document.getElementById("message")
+.value
+.trim()
 || "जन्मदिन की ढेर सारी शुभकामनाएं ❤️";
 
+
 const style =
-document.getElementById("style").value;
+document.getElementById("style")
+.value;
 
 
-document.getElementById("posterName").innerText =
-name;
+document
+.getElementById("posterName")
+.innerText = name;
 
-document.getElementById("posterAge").innerText =
-age ? "🎈 " + age + " Years 🎈" : "";
 
-document.getElementById("posterMessage").innerText =
-message;
+document
+.getElementById("posterAge")
+.innerText =
+age
+? "🎈 " + age + " Years 🎈"
+: "";
 
+
+document
+.getElementById("posterMessage")
+.innerText = message;
+
+
+/* POSTER COLORS */
 
 const poster =
 document.getElementById("poster");
 
 
 if(style === "pink"){
+
 poster.style.background =
 "linear-gradient(145deg,#ff4f9a,#7b2cff)";
+
 }
+
 
 if(style === "blue"){
+
 poster.style.background =
 "linear-gradient(145deg,#0099ff,#182cff)";
+
 }
+
 
 if(style === "gold"){
+
 poster.style.background =
 "linear-gradient(145deg,#d89b00,#7b3f00)";
+
 }
+
 
 if(style === "purple"){
+
 poster.style.background =
 "linear-gradient(145deg,#8e2de2,#4a00e0)";
+
 }
 
+
+/* PHOTO */
 
 const box =
 document.getElementById("photoBox");
 
+
 if(uploadedImage){
 
 box.innerHTML =
-'<img src="' + uploadedImage + '" alt="Birthday Photo">';
+'<img src="' +
+uploadedImage +
+'" alt="Birthday Photo">';
 
-}else{
+}
+else{
 
 box.innerHTML = "📷";
 
 }
 
 
-document.getElementById("result")
-.classList.remove("hidden");
+/* SHOW POSTER */
 
-window.scrollTo({
-top:document.getElementById("result").offsetTop,
+document
+.getElementById("result")
+.classList
+.remove("hidden");
+
+
+setTimeout(function(){
+
+document
+.getElementById("result")
+.scrollIntoView({
 behavior:"smooth"
 });
+
+},100);
 
 }
 
 
-function downloadPoster(){
+/* DOWNLOAD POSTER */
+
+async function downloadPoster(){
 
 const poster =
 document.getElementById("poster");
 
+
+try{
+
+const canvas =
+await html2canvas(poster,{
+scale:3,
+useCORS:true,
+backgroundColor:null
+});
+
+
+const image =
+canvas.toDataURL("image/png");
+
+
+const link =
+document.createElement("a");
+
+
+link.download =
+"birthday-poster.png";
+
+
+link.href = image;
+
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+
+}
+
+catch(error){
+
+console.error(error);
+
 alert(
-"Poster तैयार है! Download सुविधा अगले version में जोड़ेंगे."
+"Poster download नहीं हो पाया। कृपया दोबारा कोशिश करें।"
 );
+
+}
 
 }
 
