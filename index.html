@@ -1,192 +1,211 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Birthday Poster Maker</title>
 
+<!-- Razorpay Checkout -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<!-- html2canvas -->
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
 
 *{
-  box-sizing:border-box;
+box-sizing:border-box;
 }
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#ffe0f0,#e4e0ff);
-  color:#222;
+margin:0;
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#ffe0f0,#e4e0ff);
+color:#222;
 }
 
 .container{
-  max-width:520px;
-  margin:auto;
-  padding:20px;
+max-width:520px;
+margin:auto;
+padding:20px;
 }
 
 h1{
-  text-align:center;
-  color:#7b2cff;
-  margin-bottom:5px;
+text-align:center;
+color:#7b2cff;
+margin-bottom:5px;
 }
 
 .subtitle{
-  text-align:center;
-  color:#666;
-  margin-bottom:20px;
+text-align:center;
+color:#666;
+margin-bottom:20px;
 }
 
 .card{
-  background:white;
-  padding:18px;
-  border-radius:20px;
-  box-shadow:0 8px 25px rgba(0,0,0,.12);
-  margin-bottom:20px;
+background:white;
+padding:18px;
+border-radius:20px;
+box-shadow:0 8px 25px rgba(0,0,0,.12);
+margin-bottom:20px;
 }
 
 label{
-  display:block;
-  font-weight:bold;
-  margin-top:14px;
-  margin-bottom:6px;
+display:block;
+font-weight:bold;
+margin-top:14px;
+margin-bottom:6px;
 }
 
 input,
 textarea,
 select{
-  width:100%;
-  padding:13px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  font-size:16px;
+width:100%;
+padding:13px;
+border:1px solid #ddd;
+border-radius:10px;
+font-size:16px;
 }
 
 textarea{
-  height:90px;
-  resize:none;
+height:90px;
+resize:none;
 }
 
 button{
-  width:100%;
-  border:0;
-  padding:15px;
-  border-radius:12px;
-  font-size:17px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:15px;
+width:100%;
+border:0;
+padding:15px;
+border-radius:12px;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+margin-top:15px;
 }
 
 .generate{
-  background:linear-gradient(90deg,#7b2cff,#ff2f92);
-  color:white;
+background:linear-gradient(90deg,#7b2cff,#ff2f92);
+color:white;
+}
+
+.pay{
+background:linear-gradient(90deg,#16a34a,#059669);
+color:white;
 }
 
 .download{
-  background:#111;
-  color:white;
+background:#111;
+color:white;
 }
 
 .poster{
-  position:relative;
-  overflow:hidden;
-  min-height:650px;
-  border-radius:20px;
-  padding:35px 20px;
-  text-align:center;
-  background:linear-gradient(145deg,#ff4f9a,#7b2cff);
-  color:white;
+position:relative;
+overflow:hidden;
+min-height:650px;
+border-radius:20px;
+padding:35px 20px;
+text-align:center;
+background:linear-gradient(145deg,#ff4f9a,#7b2cff);
+color:white;
 }
 
 .poster:before{
-  content:"";
-  position:absolute;
-  width:250px;
-  height:250px;
-  background:rgba(255,255,255,.15);
-  border-radius:50%;
-  top:-100px;
-  left:-80px;
+content:"";
+position:absolute;
+width:250px;
+height:250px;
+background:rgba(255,255,255,.15);
+border-radius:50%;
+top:-100px;
+left:-80px;
 }
 
 .poster:after{
-  content:"";
-  position:absolute;
-  width:220px;
-  height:220px;
-  background:rgba(255,255,255,.12);
-  border-radius:50%;
-  bottom:-100px;
-  right:-60px;
+content:"";
+position:absolute;
+width:220px;
+height:220px;
+background:rgba(255,255,255,.12);
+border-radius:50%;
+bottom:-100px;
+right:-60px;
 }
 
 .poster-content{
-  position:relative;
-  z-index:2;
+position:relative;
+z-index:2;
 }
 
 .poster-title{
-  font-size:42px;
-  font-weight:900;
-  margin:10px 0;
-  text-shadow:0 4px 8px rgba(0,0,0,.25);
+font-size:42px;
+font-weight:900;
+margin:10px 0;
+text-shadow:0 4px 8px rgba(0,0,0,.25);
 }
 
 .poster-subtitle{
-  font-size:20px;
-  margin-bottom:20px;
+font-size:20px;
+margin-bottom:20px;
 }
 
 .photo-box{
-  width:220px;
-  height:220px;
-  margin:15px auto;
-  border-radius:50%;
-  border:7px solid white;
-  overflow:hidden;
-  background:rgba(255,255,255,.2);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:70px;
+width:220px;
+height:220px;
+margin:15px auto;
+border-radius:50%;
+border:7px solid white;
+overflow:hidden;
+background:rgba(255,255,255,.2);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:70px;
 }
 
 .photo-box img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
 .name{
-  font-size:36px;
-  font-weight:900;
-  margin:15px 0 5px;
+font-size:36px;
+font-weight:900;
+margin:15px 0 5px;
 }
 
 .age{
-  font-size:22px;
-  font-weight:bold;
+font-size:22px;
+font-weight:bold;
 }
 
 .message{
-  font-size:18px;
-  line-height:1.5;
-  margin:25px 10px;
+font-size:18px;
+line-height:1.5;
+margin:25px 10px;
 }
 
 .footer{
-  font-size:14px;
-  opacity:.9;
+font-size:14px;
+opacity:.9;
 }
 
 .hidden{
-  display:none;
+display:none;
+}
+
+.status{
+text-align:center;
+font-weight:bold;
+margin-top:12px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -233,7 +252,7 @@ accept="image/*"
 
 <textarea
 id="message"
-placeholder="जन्मदिन की ढेर सारी शुभकामनाएं! भगवान आपको हमेशा खुश रखे ❤️"
+placeholder="जन्मदिन की ढेर सारी शुभकामनाएं! ❤️"
 ></textarea>
 
 
@@ -346,11 +365,16 @@ id="posterMessage"
 
 
 <button
-class="download"
-onclick="downloadPoster()"
+class="pay"
+onclick="startPayment()"
 >
-⬇️ Poster Download करें
+💳 Pay ₹29 & Download Poster
 </button>
+
+<div
+id="status"
+class="status"
+></div>
 
 </div>
 
@@ -361,8 +385,10 @@ onclick="downloadPoster()"
 
 let uploadedImage = null;
 
+let posterReady = false;
 
-/* PHOTO UPLOAD */
+
+/* PHOTO */
 
 document
 .getElementById("photo")
@@ -378,7 +404,8 @@ const reader = new FileReader();
 
 reader.onload=function(event){
 
-uploadedImage = event.target.result;
+uploadedImage =
+event.target.result;
 
 };
 
@@ -387,7 +414,7 @@ reader.readAsDataURL(file);
 });
 
 
-/* GENERATE POSTER */
+/* GENERATE */
 
 function generatePoster(){
 
@@ -418,7 +445,8 @@ document.getElementById("style")
 
 document
 .getElementById("posterName")
-.innerText = name;
+.innerText =
+name;
 
 
 document
@@ -431,10 +459,11 @@ age
 
 document
 .getElementById("posterMessage")
-.innerText = message;
+.innerText =
+message;
 
 
-/* POSTER COLORS */
+/* COLORS */
 
 const poster =
 document.getElementById("poster");
@@ -486,14 +515,16 @@ uploadedImage +
 '" alt="Birthday Photo">';
 
 }
+
 else{
 
-box.innerHTML = "📷";
+box.innerHTML =
+"📷";
 
 }
 
 
-/* SHOW POSTER */
+/* SHOW */
 
 document
 .getElementById("result")
@@ -501,7 +532,8 @@ document
 .remove("hidden");
 
 
-setTimeout(function(){
+posterReady = true;
+
 
 document
 .getElementById("result")
@@ -509,12 +541,199 @@ document
 behavior:"smooth"
 });
 
-},100);
+}
+
+
+/* PAYMENT */
+
+async function startPayment(){
+
+if(!posterReady){
+
+alert(
+"पहले Poster Generate करें।"
+);
+
+return;
 
 }
 
 
-/* DOWNLOAD POSTER */
+const status =
+document.getElementById("status");
+
+
+status.innerText =
+"Payment order बनाया जा रहा है...";
+
+
+try{
+
+/*
+Create Razorpay order
+*/
+
+const response =
+await fetch(
+"/api/create-order.js",
+{
+method:"POST",
+headers:{
+"Content-Type":
+"application/json"
+},
+body:JSON.stringify({
+amount:2900
+})
+}
+);
+
+
+const order =
+await response.json();
+
+
+if(!response.ok){
+
+throw new Error(
+order.error ||
+"Order creation failed"
+);
+
+}
+
+
+/*
+Razorpay Checkout
+*/
+
+const options = {
+
+key:
+"rzp_test_TS6DHfIIr0h58U",
+
+amount:
+order.amount,
+
+currency:
+"INR",
+
+name:
+"Birthday Poster Maker",
+
+description:
+"Birthday Poster Download",
+
+order_id:
+order.id,
+
+handler:
+async function(payment){
+
+status.innerText =
+"Payment verify हो रहा है...";
+
+
+const verifyResponse =
+await fetch(
+"/api/verify-payment.js",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+razorpay_order_id:
+payment.razorpay_order_id,
+
+razorpay_payment_id:
+payment.razorpay_payment_id,
+
+razorpay_signature:
+payment.razorpay_signature
+
+})
+
+}
+);
+
+
+const result =
+await verifyResponse.json();
+
+
+if(
+result.success
+){
+
+status.innerText =
+"✅ Payment Successful!";
+
+
+await downloadPoster();
+
+}
+
+else{
+
+status.innerText =
+"❌ Payment verification failed.";
+
+}
+
+},
+
+theme:{
+color:"#7b2cff"
+}
+
+};
+
+
+const razorpay =
+new Razorpay(options);
+
+
+razorpay.on(
+"payment.failed",
+function(response){
+
+status.innerText =
+"❌ Payment failed.";
+
+alert(
+"Payment failed. कृपया दोबारा कोशिश करें।"
+);
+
+});
+
+
+razorpay.open();
+
+
+}
+
+catch(error){
+
+console.error(error);
+
+status.innerText =
+"❌ Payment शुरू नहीं हो पाया।";
+
+alert(
+"Payment system में समस्या है।"
+);
+
+}
+
+}
+
+
+/* DOWNLOAD */
 
 async function downloadPoster(){
 
@@ -525,15 +744,20 @@ document.getElementById("poster");
 try{
 
 const canvas =
-await html2canvas(poster,{
+await html2canvas(
+poster,
+{
 scale:3,
 useCORS:true,
 backgroundColor:null
-});
+}
+);
 
 
 const image =
-canvas.toDataURL("image/png");
+canvas.toDataURL(
+"image/png"
+);
 
 
 const link =
@@ -544,7 +768,8 @@ link.download =
 "birthday-poster.png";
 
 
-link.href = image;
+link.href =
+image;
 
 
 document.body.appendChild(link);
@@ -553,7 +778,6 @@ link.click();
 
 document.body.removeChild(link);
 
-
 }
 
 catch(error){
@@ -561,7 +785,7 @@ catch(error){
 console.error(error);
 
 alert(
-"Poster download नहीं हो पाया। कृपया दोबारा कोशिश करें।"
+"Poster download नहीं हो पाया।"
 );
 
 }
